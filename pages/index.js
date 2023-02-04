@@ -89,6 +89,7 @@ const renderCards = (cards) => {
 }
 
 renderCards(initialCards);
+console.log(initialCards);
 
 
 
