@@ -77,6 +77,12 @@ const handelLike = (evt) => {
     evt.target.classList.toggle('card__like_active');
 }
 
+const handleDelete = (evt) => {
+    evt.target.closest(".card").remove() 
+}
+
+
+
 const createCard = (card) => { 
     const itemCard = cardTemplate.cloneNode(true);
     const imageCard = itemCard.querySelector(".card__image"); 
@@ -84,6 +90,7 @@ const createCard = (card) => {
     imageCard.src = card.link; 
     imageCard.alt = card.name; 
     itemCard.querySelector('.card__like').addEventListener('click', handelLike);
+    const deleteButton = itemCard.querySelector('.card__button-delete').addEventListener('click', handleDelete);
     
     return itemCard; 
   
