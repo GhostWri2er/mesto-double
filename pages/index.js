@@ -31,6 +31,7 @@ const editBtn = document.querySelector('.profile__edit-button');
 const addBtn = document.querySelector('.profile__add-button');
 const closePopupEditBtn = document.querySelector('.popup__button-close');
 const closePopupAddBtn = document.querySelector('.popup__button-close_add');
+const likeCardBtn = document.querySelector('.card__like');
 //Попапы(переменные)
 const editPopup = document.querySelector('.profile-popup');
 const addPopup = document.querySelector('.popup_add');
@@ -72,12 +73,18 @@ const closeAddPopup = () => {
     addPopup.classList.remove('popup_opened');
 }
 
+const handelLike = (evt) => {
+    evt.target.classList.toggle('card__like_active');
+}
+
 const createCard = (card) => { 
     const itemCard = cardTemplate.cloneNode(true);
     const imageCard = itemCard.querySelector(".card__image"); 
     itemCard.querySelector(".card__name").textContent = card.name; 
     imageCard.src = card.link; 
     imageCard.alt = card.name; 
+    itemCard.querySelector('.card__like').addEventListener('click', handelLike);
+    
     return itemCard; 
   
   }
@@ -89,7 +96,10 @@ const renderCards = (cards) => {
 }
 
 renderCards(initialCards);
-console.log(initialCards);
+
+
+
+
 
 
 
