@@ -35,6 +35,8 @@ const likeCardBtn = document.querySelector('.card__like');
 //Попапы(переменные)
 const editPopup = document.querySelector('.profile-popup');
 const addPopup = document.querySelector('.popup_add');
+const popups = document.querySelectorAll(".popup");
+const popupFullScreen = document.querySelector(".popup-FullScreen");
 
 //Формы
 const formElement = document.querySelector('.popup__form-edit');
@@ -51,36 +53,57 @@ const inputCardDescription = document.querySelector('.popup__input-description_a
 //Имя и картинка
 const cardName = document.querySelector('.card__name');
 const cardImage = document.querySelector('.card__image');
+const popupName = document.querySelector('.popup__name-FullScreen');
+const popupImg = document.querySelector('.popup__img-FullScreen');
 
 //template
 const cardTemplate = document.querySelector('#template').content;
 const cardsGrid = document.querySelector('.grid-cards');
 
 //Функции открытия закрытия попапов.
-const openEditPopup = () => {
-    editPopup.classList.add('popup_opened');
+const openPopup = (popup) => {
+    popup.classList.add('popup_opened');
 }
 
-const closeEditPopup = () => {
-    editPopup.classList.remove('popup_opened');
+const closePopup = popup => {
+  popup.classList.remove('popup_opened');
+}
+
+const openEditPopup = () => {
+  openPopup(editPopup)
 }
 
 const openAddPopup = () => {
-    addPopup.classList.add('popup_opened');
+  openPopup(addPopup)
 }
 
-const closeAddPopup = () => {
-    addPopup.classList.remove('popup_opened');
-}
+popups.forEach((popup) => { 
+  popup.addEventListener('mousedown', (evt) => { 
+    if (evt.target.classList.contains('popup_opened')) { 
+      closePopup(popup); 
+    }; 
+    if (evt.target.classList.contains('popup__close')) { 
+      closePopup(popup); 
+    }; 
+  }); 
+});
 
-const handelLike = (evt) => {
+const handleLike = (evt) => {
     evt.target.classList.toggle('card__like_active');
 }
 
 const handleDelete = (evt) => {
-    evt.target.closest(".card").remove() 
+    evt.target.closest(".card").remove();
 }
 
+const handleOpenFullscreen = (evt) => {
+  openPopup(popupFullScreen);
+  const target = evt.target;
+  const cardName = target.closest('.card').querySelector('.card__name');
+  popupImg.src = target.src;
+  popupName.textContent = cardName.textContent;
+  popupName.alt = cardName.textContent;
+}
 
 
 const createCard = (card) => { 
@@ -89,8 +112,9 @@ const createCard = (card) => {
     itemCard.querySelector(".card__name").textContent = card.name; 
     imageCard.src = card.link; 
     imageCard.alt = card.name; 
-    itemCard.querySelector('.card__like').addEventListener('click', handelLike);
-    const deleteButton = itemCard.querySelector('.card__button-delete').addEventListener('click', handleDelete);
+    itemCard.querySelector('.card__like').addEventListener('click', handleLike);
+    itemCard.querySelector('.card__button-delete').addEventListener('click', handleDelete);
+    itemCard.querySelector('.card__open-fullscreen').addEventListener('click', handleOpenFullscreen);
     
     return itemCard; 
   
@@ -104,27 +128,16 @@ const renderCards = (cards) => {
 
 renderCards(initialCards);
 
-
-
-
-
-
-
-
 const handleFormSubmit = (evt) => {
     evt.preventDefault();
     profileName.textContent = inputName.value;
     profileDescription.textContent = inputDescription.value;
-    closeEditPopup();
 }
 
 const handleFormCardSubmit = () => {
     cardTemplate.querySelector('.card__image').src = inputCardDescription.value;
     cardTemplate.querySelector('.card__name').textContent = inputCardName.value;
     cardsGrid.prepend(cardTemplate);
-    
-
-    closeAddPopup();
 }
 
 // Прикрепляем обработчик к форме:
@@ -141,5 +154,3 @@ formElementAdd.addEventListener("submit", (event) => {
 //Слушатели событий
 editBtn.addEventListener('click', openEditPopup);
 addBtn.addEventListener('click', openAddPopup);
-closePopupEditBtn.addEventListener('click', closeEditPopup);
-closePopupAddBtn.addEventListener('click', closeAddPopup);
